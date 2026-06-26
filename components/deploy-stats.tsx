@@ -98,36 +98,27 @@ export function DeployStats() {
 
         {/* Chart card: human vs agent deploy mix */}
         <div className="bg-surface-white border border-border-subtle rounded-2xl p-4 shadow-sm relative overflow-hidden min-h-[132px] flex flex-col">
-          <div className="flex justify-between items-center mb-1 relative z-10">
+          <div className="flex justify-between items-start relative z-10">
             <span className="text-on-surface-variant text-[10px] font-semibold uppercase tracking-wider">
-              Deploy mix
+              Agent executions
             </span>
-            <div className="flex items-center gap-2 text-[9px] font-semibold uppercase">
-              <span className="flex items-center gap-1 text-electric-purple">
-                <span className="w-1.5 h-1.5 rounded-full bg-electric-purple" />
-                Agent
-              </span>
-              <span className="flex items-center gap-1 text-outline">
-                <span className="w-1.5 h-1.5 rounded-full bg-outline/50" />
-                Human
-              </span>
-            </div>
+            <span className="w-1.5 h-1.5 rounded-full bg-electric-purple mt-1.5" />
           </div>
-          <div className="absolute bottom-0 left-0 w-full h-16">
+          <div className="relative z-10 mt-1">
+            <span className="font-display text-3xl font-bold text-on-surface">
+              +{headlineStats.executionsPeakPct}%
+            </span>
+            <p className="text-[10px] text-on-surface-variant font-medium mt-1">
+              Peak vs. last period
+            </p>
+          </div>
+          <div className="absolute bottom-0 left-0 w-full h-12 pointer-events-none">
             <svg
               className="w-full h-full"
               viewBox="0 0 100 40"
               preserveAspectRatio="none"
             >
-              <path d={areaPath(norm.human)} fill="rgba(116,120,120,0.08)" />
-              <path
-                d={linePath(norm.human)}
-                fill="none"
-                stroke="#747878"
-                strokeOpacity={0.5}
-                strokeWidth={1.25}
-              />
-              <path d={areaPath(norm.agent)} fill="rgba(139,92,246,0.12)" />
+              <path d={areaPath(norm.agent)} fill="rgba(139,92,246,0.14)" />
               <path
                 d={linePath(norm.agent)}
                 fill="none"
@@ -135,14 +126,6 @@ export function DeployStats() {
                 strokeWidth={1.75}
               />
             </svg>
-          </div>
-          <div className="relative z-10 mt-auto">
-            <span className="text-xl font-bold text-on-surface">
-              +{headlineStats.executionsPeakPct}%
-            </span>
-            <p className="text-[9px] text-on-surface-variant uppercase font-bold tracking-tight">
-              Agent executions peak
-            </p>
           </div>
         </div>
       </div>

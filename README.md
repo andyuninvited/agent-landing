@@ -1,36 +1,53 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# The Agent-as-User Landing Framework
 
-## Getting Started
+A working prototype of product-landing / adoption measurement, rebuilt for the
+agent era. The thesis: Vercel's fastest-growing user is no longer a human with a
+terminal, it is an agent (~30% of deploys, most of them Claude Code). A
+product-landing framework built to measure human adoption cannot see that user.
+This is what measuring the agent-as-user looks like.
 
-First, run the development server:
+Built on Vercel, with Claude Code, in an afternoon, by Andy Rosic, for the
+Vercel Product Strategy & Operations conversation.
+
+> All data is **illustrative / synthetic**. The point is the framework, not
+> fake precision.
+
+## What's here
+
+- **Who's actually deploying** - human vs agent deploy mix trending toward ~30%
+  agent, Claude Code dominant.
+- **Landing, rebuilt** - the metrics a human-adoption dashboard goes blind on,
+  and the agent-native replacements (time-to-first-deploy, iterate-loop count,
+  retry/success rate, downstream reuse).
+- **Ask the framework** - an interactive panel that reasons over the synthetic
+  dataset to answer ops questions like "Did feature-analytics-v2 land?" It runs
+  locally (deterministic, free, safe to expose publicly). A live Claude model
+  can be dropped in behind the same shape - see `lib/framework.ts`.
+- **ShipOps rhythm strip** - a nod to the weekly launch cadence.
+
+## Stack
+
+Next.js 16 (App Router) - Tailwind v4 - lucide-react - deployed on Vercel.
+Design tokens ported from a Google Stitch design system.
+
+## Develop
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
+pnpm install
 pnpm dev
-# or
-bun dev
+pnpm build
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Structure
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```
+app/
+  layout.tsx        # fonts (Geist/Inter/JetBrains Mono), metadata
+  page.tsx          # composes the sections
+  globals.css       # Tailwind v4 @theme design tokens
+components/          # nav, hero, deploy-stats, landing-rebuilt,
+                     # ask-framework, rhythm-strip, footer, sparkline
+lib/
+  data.ts           # synthetic dataset
+  framework.ts      # local reasoning for "Ask the framework"
+```

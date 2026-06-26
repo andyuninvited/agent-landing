@@ -29,13 +29,21 @@ export function SiteNav() {
           </div>
         </div>
         <div className="flex items-center gap-3">
-          <span className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-surface-container transition-all text-on-surface-variant">
+          <button
+            type="button"
+            aria-label="Settings"
+            className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-surface-container transition-all text-on-surface-variant"
+          >
             <Settings className="w-5 h-5" />
-          </span>
+          </button>
           <div className="relative">
-            <span className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-surface-container transition-all text-on-surface-variant">
+            <button
+              type="button"
+              aria-label="Notifications"
+              className="w-9 h-9 flex items-center justify-center rounded-full hover:bg-surface-container transition-all text-on-surface-variant"
+            >
               <Bell className="w-5 h-5" />
-            </span>
+            </button>
             <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-error rounded-full" />
           </div>
           <span className="w-9 h-9 rounded-full border-2 border-surface-white bg-gradient-to-br from-electric-purple to-deep-blue flex items-center justify-center text-on-primary text-[12px] font-bold">

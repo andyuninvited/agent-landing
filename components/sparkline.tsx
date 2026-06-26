@@ -10,7 +10,7 @@ type SparklineProps = {
 
 // Builds a smooth-ish polyline path from normalized points over a 100x40 box.
 function toPath(points: number[]): string {
-  if (points.length === 0) return "";
+  if (points.length < 2) return "";
   const stepX = 100 / (points.length - 1);
   return points
     .map((v, i) => {

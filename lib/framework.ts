@@ -9,6 +9,7 @@ import {
   rhythmStrip,
   headlineStats,
   type FeatureRecord,
+  type RhythmDay,
 } from "./data";
 
 export type Verdict = {
@@ -102,7 +103,7 @@ export function askFramework(question: string): Verdict {
     return {
       question: q,
       answer: `Agent fleet health is green. This week's cadence: ${rhythmStrip
-        .filter((d) => d.deploys)
+        .filter((d): d is RhythmDay & { deploys: number } => d.deploys !== null)
         .map((d) => `${d.day} ${d.deploys}`)
         .join(", ")}. Active rollout is ${active?.feature ?? "n/a"} at ${active?.deploys ?? 0} deploys, no retry spikes on the live surface.`,
       source: "source: ShipOps rhythm strip + agent telemetry",

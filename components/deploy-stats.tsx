@@ -20,7 +20,7 @@ function normalize(series: DeployPoint[]) {
 }
 
 function areaPath(points: number[]): string {
-  if (points.length === 0) return "";
+  if (points.length < 2) return "";
   const stepX = 100 / (points.length - 1);
   const line = points
     .map((v, i) => `${i === 0 ? "M" : "L"}${(i * stepX).toFixed(1)},${(40 - v * 38).toFixed(1)}`)

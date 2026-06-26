@@ -53,7 +53,7 @@ function landingVerdict(f: FeatureRecord): Verdict {
     f.verdict === "landed"
       ? "Yes - it landed for both humans and agents."
       : f.verdict === "landed-agent-only"
-        ? "Yes, but only the old framework would say no."
+        ? "Yes and no."
         : "Not yet - it looks adopted but it is at risk.";
 
   return {

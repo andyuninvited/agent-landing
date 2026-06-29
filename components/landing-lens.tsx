@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { Eye, EyeOff, RotateCcw } from "lucide-react";
+import { User, Bot, RotateCcw } from "lucide-react";
 import { featureScoring } from "@/lib/data";
 import { computeScore, verdictFor, type VerdictTone } from "@/lib/scoring";
 
@@ -54,11 +54,11 @@ export function LandingLens() {
 
       {/* Controls */}
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <div className="flex bg-surface-container rounded-lg p-0.5 gap-0.5">
+        <div className="flex gap-1.5">
           {(
             [
-              { id: "human", label: "Human-adoption lens", icon: EyeOff },
-              { id: "agent", label: "Agent-as-user lens", icon: Eye },
+              { id: "human", label: "Human-adoption lens", icon: User },
+              { id: "agent", label: "Agent-as-user lens", icon: Bot },
             ] as const
           ).map((opt) => (
             <button
@@ -67,8 +67,8 @@ export function LandingLens() {
               className={
                 "px-3 py-1.5 rounded-md text-[11px] font-bold uppercase tracking-wider transition-all flex items-center gap-1.5 " +
                 (lens === opt.id
-                  ? "bg-surface-white shadow-sm text-primary"
-                  : "text-on-surface-variant hover:text-on-surface")
+                  ? "bg-success-green text-white shadow-sm"
+                  : "bg-success-green/10 text-success-green hover:bg-success-green/20")
               }
             >
               <opt.icon className="w-3.5 h-3.5" />

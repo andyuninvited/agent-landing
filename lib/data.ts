@@ -155,3 +155,87 @@ export const rhythmStrip: RhythmDay[] = [
   { day: "Thursday", deploys: null, feature: null, state: "upcoming" },
   { day: "Friday", deploys: null, feature: "Weekly Review", state: "upcoming" },
 ];
+
+// Landing scorecard - per feature, the signals each lens can see (0-100 health)
+// with default weights. The point: under the human lens an agent-driven launch
+// reads near-zero no matter how you weight it, because the adopter isn't human.
+export type LensSignal = { key: string; label: string; value: number; weight: number };
+export type LensView = { signals: LensSignal[]; takeaway: string };
+export type FeatureScoring = { id: string; name: string; human: LensView; agent: LensView };
+
+export const featureScoring: FeatureScoring[] = [
+  {
+    id: "feature-analytics-v2",
+    name: "feature-analytics-v2",
+    human: {
+      takeaway:
+        "Looks dead. Nobody clicked “adopt” and DAU didn’t move - because the adopters weren’t human.",
+      signals: [
+        { key: "clicks", label: "Human clicks & navigation", value: 8, weight: 25 },
+        { key: "dau", label: "Daily active users (change)", value: 6, weight: 25 },
+        { key: "tooltip", label: "In-product tooltip engagement", value: 11, weight: 25 },
+        { key: "adopt", label: "Manual “adopt” clicks", value: 4, weight: 25 },
+      ],
+    },
+    agent: {
+      takeaway:
+        "Landed. Agents integrated it in 42% of sessions within an hour, reuse is growing, no retry spike.",
+      signals: [
+        { key: "integration", label: "Agent integration rate", value: 84, weight: 20 },
+        { key: "ttfd", label: "Time-to-first-working-deploy", value: 88, weight: 20 },
+        { key: "loop", label: "Deploy → iterate loop health", value: 80, weight: 20 },
+        { key: "retry", label: "Agent retry / success rate", value: 92, weight: 20 },
+        { key: "reuse", label: "Downstream reuse", value: 60, weight: 20 },
+      ],
+    },
+  },
+  {
+    id: "sdk-v4",
+    name: "sdk-v4",
+    human: {
+      takeaway:
+        "Partial. Humans adopted it moderately, but the old lens misses how much agents drove it.",
+      signals: [
+        { key: "clicks", label: "Human clicks & navigation", value: 55, weight: 25 },
+        { key: "dau", label: "Daily active users (change)", value: 48, weight: 25 },
+        { key: "tooltip", label: "In-product tooltip engagement", value: 50, weight: 25 },
+        { key: "adopt", label: "Manual “adopt” clicks", value: 52, weight: 25 },
+      ],
+    },
+    agent: {
+      takeaway: "Landed strong, with deep downstream agent reuse across the SDK surface.",
+      signals: [
+        { key: "integration", label: "Agent integration rate", value: 90, weight: 20 },
+        { key: "ttfd", label: "Time-to-first-working-deploy", value: 82, weight: 20 },
+        { key: "loop", label: "Deploy → iterate loop health", value: 78, weight: 20 },
+        { key: "retry", label: "Agent retry / success rate", value: 94, weight: 20 },
+        { key: "reuse", label: "Downstream reuse", value: 95, weight: 20 },
+      ],
+    },
+  },
+  {
+    id: "auth-refactor",
+    name: "auth-refactor",
+    human: {
+      takeaway:
+        "Looks like a clean win - humans adopted it. The old lens would ship it and miss the agent-side failure.",
+      signals: [
+        { key: "clicks", label: "Human clicks & navigation", value: 80, weight: 25 },
+        { key: "dau", label: "Daily active users (change)", value: 75, weight: 25 },
+        { key: "tooltip", label: "In-product tooltip engagement", value: 70, weight: 25 },
+        { key: "adopt", label: "Manual “adopt” clicks", value: 78, weight: 25 },
+      ],
+    },
+    agent: {
+      takeaway:
+        "At risk. Retry rate spiked to 11.7% and downstream reuse stalled - agents are failing on it.",
+      signals: [
+        { key: "integration", label: "Agent integration rate", value: 40, weight: 20 },
+        { key: "ttfd", label: "Time-to-first-working-deploy", value: 70, weight: 20 },
+        { key: "loop", label: "Deploy → iterate loop health", value: 45, weight: 20 },
+        { key: "retry", label: "Agent retry / success rate", value: 30, weight: 20 },
+        { key: "reuse", label: "Downstream reuse", value: 15, weight: 20 },
+      ],
+    },
+  },
+];

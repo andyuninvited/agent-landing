@@ -85,6 +85,7 @@ export const agentNativeMetrics = [
   "Deploy -> iterate loop count",
   "Agent retry / success rate",
   "Downstream reuse of the shipped surface",
+  "Composite acceptance (final result vs mandate, human verdict)",
 ];
 
 // Features the "Ask the framework" panel can reason over.
@@ -179,13 +180,14 @@ export const featureScoring: FeatureScoring[] = [
     },
     agent: {
       takeaway:
-        "Landed. Agents integrated it in 42% of sessions within an hour, reuse is growing, no retry spike.",
+        "Landed. Agents integrated it in 42% of sessions within an hour, reuse is growing, no retry spike. Owner verdict: keep.",
       signals: [
         { key: "integration", label: "Agent integration rate", value: 84, weight: 20 },
         { key: "ttfd", label: "Time-to-first-working-deploy", value: 88, weight: 20 },
         { key: "loop", label: "Deploy → iterate loop health", value: 80, weight: 20 },
         { key: "retry", label: "Agent retry / success rate", value: 92, weight: 20 },
         { key: "reuse", label: "Downstream reuse", value: 60, weight: 20 },
+        { key: "acceptance", label: "Composite acceptance (human verdict)", value: 85, weight: 30 },
       ],
     },
   },
@@ -203,13 +205,15 @@ export const featureScoring: FeatureScoring[] = [
       ],
     },
     agent: {
-      takeaway: "Landed strong, with deep downstream agent reuse across the SDK surface.",
+      takeaway:
+        "Landed strong, with deep downstream agent reuse across the SDK surface. Owner verdict: keep.",
       signals: [
         { key: "integration", label: "Agent integration rate", value: 90, weight: 20 },
         { key: "ttfd", label: "Time-to-first-working-deploy", value: 82, weight: 20 },
         { key: "loop", label: "Deploy → iterate loop health", value: 78, weight: 20 },
         { key: "retry", label: "Agent retry / success rate", value: 94, weight: 20 },
         { key: "reuse", label: "Downstream reuse", value: 95, weight: 20 },
+        { key: "acceptance", label: "Composite acceptance (human verdict)", value: 90, weight: 30 },
       ],
     },
   },
@@ -228,13 +232,14 @@ export const featureScoring: FeatureScoring[] = [
     },
     agent: {
       takeaway:
-        "At risk. Retry rate spiked to 11.7% and downstream reuse stalled - agents are failing on it.",
+        "At risk. Retry rate spiked to 11.7% and downstream reuse stalled - agents are failing on it. Owner verdict: returned. Every step shipped cleanly; the composite missed the mandate.",
       signals: [
         { key: "integration", label: "Agent integration rate", value: 40, weight: 20 },
         { key: "ttfd", label: "Time-to-first-working-deploy", value: 70, weight: 20 },
         { key: "loop", label: "Deploy → iterate loop health", value: 45, weight: 20 },
         { key: "retry", label: "Agent retry / success rate", value: 30, weight: 20 },
         { key: "reuse", label: "Downstream reuse", value: 15, weight: 20 },
+        { key: "acceptance", label: "Composite acceptance (human verdict)", value: 20, weight: 30 },
       ],
     },
   },

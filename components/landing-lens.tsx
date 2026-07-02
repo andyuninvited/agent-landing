@@ -49,10 +49,10 @@ export function LandingLens() {
           metric you like. Under the human-adoption lens, an agent-driven launch
           stays invisible no matter how you weight it, because the user who
           adopted it isn&apos;t human. The newest signal, composite acceptance,
-          came from community pushback: a chain of agents can pass every
-          per-step check and still miss the mandate, so the accountable
-          human&apos;s keep-or-return verdict on the final result carries the
-          heaviest default weight.
+          came from pushback by Kira M. Allen in Lenny&apos;s community: a
+          chain of agents can pass every per-step check and still miss the
+          mandate, so the accountable human&apos;s keep-or-return verdict on
+          the final result carries the heaviest default weight.
         </p>
       </div>
 

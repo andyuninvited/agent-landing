@@ -1,53 +1,212 @@
-# The Agent-as-User Landing Framework
+# agent-landing
 
-A working prototype of product-landing / adoption measurement, rebuilt for the
-agent era. The thesis: Vercel's fastest-growing user is no longer a human with a
-terminal, it is an agent (~30% of deploys, most of them Claude Code). A
-product-landing framework built to measure human adoption cannot see that user.
-This is what measuring the agent-as-user looks like.
+A CLI and Claude Code skill built on the Agent-as-User Landing Framework. It answers two questions for any product:
 
-Built on Vercel, with Claude Code, in an afternoon, by Andy Rosic, for the
-Vercel Product Strategy & Operations conversation.
+1. **Can an agent find and use this product?** `agent-landing scan <url>` checks the surfaces agents actually read (robots.txt, llms.txt, sitemaps, server-rendered HTML, markdown, JSON-LD, API specs, MCP discovery, auth friction, and token cost) and returns a score per check, an overall score, and a prioritized fix list.
+2. **Did a launch land for agent users?** `agent-landing score --data <events>` scores each feature from your own telemetry under the lenses you define (human, agent, partner, or any other), with verdicts and a plain-language explanation such as a retry spike callout.
 
-> All data is **illustrative / synthetic**. The point is the framework, not
-> fake precision.
+Signals, weights, thresholds, lenses, verdict labels, and scan settings all live in one validated config file. The CLI makes no LLM calls and uses no paid APIs.
 
-## What's here
+The repo also holds the original demo site, live at [agent-landing-rosic.vercel.app](https://agent-landing-rosic.vercel.app), which shows the framework on synthetic Vercel data.
 
-- **Who's actually deploying** - human vs agent deploy mix trending toward ~30%
-  agent, Claude Code dominant.
-- **Landing, rebuilt** - the metrics a human-adoption dashboard goes blind on,
-  and the agent-native replacements (time-to-first-deploy, iterate-loop count,
-  retry/success rate, downstream reuse).
-- **Ask the framework** - an interactive panel that reasons over the synthetic
-  dataset to answer ops questions like "Did feature-analytics-v2 land?" It runs
-  locally (deterministic, free, safe to expose publicly). A live Claude model
-  can be dropped in behind the same shape - see `lib/framework.ts`.
-- **ShipOps rhythm strip** - a nod to the weekly launch cadence.
+## Quickstart: CLI
 
-## Stack
+The package is not on npm yet, so run it from a clone:
 
-Next.js 16 (App Router) - Tailwind v4 - lucide-react - deployed on Vercel.
-Design tokens ported from a Google Stitch design system.
+```bash
+git clone https://github.com/andyuninvited/agent-landing.git
+cd agent-landing
+pnpm install
+pnpm --filter agent-landing build
+alias agent-landing="node $PWD/packages/cli/dist/cli.js"
+```
+
+Then, in your own project:
+
+```bash
+agent-landing init                               # writes agent-landing.config.json
+agent-landing scan https://your-product.com      # terminal report
+agent-landing scan https://your-product.com --md --out scan.md
+agent-landing score --data launches.csv --json
+agent-landing score --example                    # synthetic demo data
+```
+
+| Option | Applies to | What it does |
+| --- | --- | --- |
+| `--config <path>` | scan, score | Config file. Defaults to `./agent-landing.config.json` when present, else built-in defaults. |
+| `--json`, `--md` | scan, score | JSON or Markdown output instead of the terminal report. |
+| `--out <path>` | all | Write output to a file. For `init`, the config path. |
+| `--pages /,/docs` | scan | Override the key pages for one run. |
+| `--allow-private` | scan | Allow loopback and private network targets. For scanning your own local dev server only. |
+| `--force` | init | Overwrite an existing config. |
+
+Exit codes: 0 on success, 1 on a runtime or config error, 2 on a usage error.
+
+## Quickstart: Claude Code skill
+
+`skills/agent-landing/` is a Claude Code skill. Copy it into a project's `.claude/skills/` (or your personal `~/.claude/skills/`) and ask Claude something like "can agents use our docs site?" or "did the v2 launch land for agent users?". Claude interviews you about the product, the agent users, the pages that matter, the telemetry you have, and what "landed" means for you. It then writes the config, runs `scan` and `score`, and walks you through the top fixes. The skill looks for the CLI on your PATH, then in the project, then in a local clone.
+
+## Example output
+
+`agent-landing scan https://agent-landing-rosic.vercel.app` (the demo site itself, scanned 2026-10-29):
+
+```
+Overall 40/100  (10 checks scored, 15 requests, pages: /)
+
+  WARN  70  robots.txt rules for AI agents
+            No robots.txt (HTTP 404). Agents are allowed by default, but there is no explicit AI agent policy and no Sitemap line.
+  FAIL   0  llms.txt and llms-full.txt
+            No /llms.txt (HTTP 404).
+  PASS 100  Server-rendered readable HTML
+            All 1 key page(s) return readable HTML without running JavaScript.
+  ...
+
+Prioritized fixes
+  1. llms.txt and llms-full.txt (score 0, up to +15 overall)
+  2. Markdown versions of key pages (score 0, up to +10 overall)
+  3. OpenAPI and API docs discoverability (score 0, up to +10 overall)
+```
+
+`agent-landing score --example`:
+
+```
+feature-analytics-v2
+  Yes and no. It landed under the Agent-as-user lens, and the Human-adoption lens can't see it.
+  Human-adoption lens    7/100  Can't see it
+  Agent-as-user lens    82/100  Landed
+
+auth-refactor
+  Not yet. It looks landed under the Human-adoption lens, but it is at risk under the Agent-as-user lens.
+  Human-adoption lens   76/100  Landed
+  Agent-as-user lens    35/100  At risk
+  alert Retry rate spiked to 11.7%. A human-adoption dashboard would have called this a win and missed the failure.
+```
+
+## Scan checks
+
+| Check | Default weight | What it looks for |
+| --- | --- | --- |
+| `robots-ai` | 15 | robots.txt rules for ClaudeBot, Claude-User, GPTBot, ChatGPT-User, PerplexityBot, and other agents on each key page, plus an explicit policy and a Sitemap line |
+| `llms-txt` | 15 | `/llms.txt` with a title, summary, and links, plus `/llms-full.txt` |
+| `sitemap` | 5 | A valid XML sitemap, referenced from robots.txt, listing the key pages |
+| `ssr-readable` | 15 | Key pages readable without JavaScript, with a title, meta description, and h1 |
+| `markdown` | 10 | Markdown versions via `Accept: text/markdown` or `.md` URLs, advertised with `<link rel="alternate">` |
+| `structured-data` | 5 | Valid schema.org JSON-LD on key pages |
+| `api-docs` | 10 | An OpenAPI spec, `/.well-known/api-catalog`, or linked API docs |
+| `mcp` | 10 | A `/.well-known` MCP document or a documented MCP endpoint |
+| `auth-friction` | 10 | Login redirects, 401/403/429, bot challenges, CAPTCHAs, and password walls on key pages |
+| `page-weight` | 5 | Token cost of key pages, using the markdown version when one exists |
+
+Full scoring rules for each check: [skills/agent-landing/references/check-catalog.md](skills/agent-landing/references/check-catalog.md).
+
+### Fetching and safety
+
+The scanner reads robots.txt first and obeys it for its own requests (token `agent-landing`). It sends a clear User-Agent and enforces a per-request timeout, a response size cap after decompression, a page cap, and a request cap. Every connection, including each redirect hop, is checked at DNS resolution time and refused for loopback, private, link-local, CGNAT, multicast, and reserved addresses in IPv4 and IPv6. Fetched content is parsed as text and JSON and never executed, and strings lifted from fetched pages are stripped of control characters before they reach your terminal.
+
+## Config reference
+
+`agent-landing init` writes `agent-landing.config.json` with a `$schema` link for editor autocomplete. The schema lives at [packages/cli/schema/agent-landing.schema.json](packages/cli/schema/agent-landing.schema.json) and is generated from the zod schema that validates the file at load time.
+
+### `scan`
+
+| Field | Default | Meaning |
+| --- | --- | --- |
+| `keyPages` | `["/"]` | Paths that matter most to an agent. Each starts with `/`. |
+| `maxPages` | 5 | Upper bound on key pages fetched (1 to 20). |
+| `maxRequests` | 40 | Upper bound on requests per scan. |
+| `timeoutMs` | 10000 | Per-request timeout. |
+| `maxBytes` | 2000000 | Per-response cap after decompression. |
+| `userAgent` | `agent-landing/0.1 (+repo URL)` | User-Agent sent with every request. |
+| `agentUserAgents` | ClaudeBot, Claude-User, GPTBot, and 8 more | Agent tokens tested against robots.txt. |
+| `checks.<id>.enabled` | `true` | Turn a check off (for example `api-docs` for a product without an API). |
+| `checks.<id>.weight` | see table above | Weight in the overall score. |
+
+### `score`
+
+| Field | Default | Meaning |
+| --- | --- | --- |
+| `format` | `wide` | `wide`: one row per feature, a column per signal. `long`: one row per feature, signal, and value. |
+| `columns` | `feature`, `signal`, `value` | Column names in your data. |
+| `signalColumns` | `{}` | Wide format: signal key to column name when they differ. |
+| `aggregate` | `mean` | How repeated values combine: `mean`, `sum`, `min`, `max`, or `last`. |
+| `lenses` | human, agent | Each lens has an `id`, a `label`, and an optional `verdicts` ladder. |
+| `verdicts` | Landed 70, Mixed signal 45, At risk 0 | Shared ladder of `{ min, label, tone }`. Tones: `landed`, `mixed`, `risk`, `blind`. |
+| `signals` | the demo's 10 signals plus a watch-only retry rate | Each has a `key`, `label`, `lens`, `weight`, `normalize` rule, and optional `alert`. |
+
+`normalize` is `{ "type": "identity" }` for values already on 0 to 100, `{ "type": "linear", "min": 0, "max": 20, "direction": "lower" }` for raw values, or `{ "type": "boolean", "good": true }`. Weight 0 makes a signal watch-only. An `alert` is `{ "when": "above", "value": 8, "message": "Retry rate spiked to {value}%." }`, compared against the raw value.
+
+A custom lens looks like this:
+
+```json
+{
+  "id": "partner",
+  "label": "Partner lens",
+  "verdicts": [
+    { "min": 60, "label": "Shipped", "tone": "landed" },
+    { "min": 0, "label": "Stalled", "tone": "risk" }
+  ]
+}
+```
+
+The full scoring method, including ingest rules and how headlines are chosen across lenses, is in [skills/agent-landing/references/scoring-method.md](skills/agent-landing/references/scoring-method.md).
+
+## Data schema
+
+CSV or JSON. JSON is an array of objects or `{ "events": [...] }`. Numbers may carry a trailing `%`, and `true`/`false` count as 1 and 0.
+
+Wide, the default (see [packages/cli/examples/launches.csv](packages/cli/examples/launches.csv)):
+
+```csv
+feature,agent_integration,agent_ttfd,agent_retry,retry_rate_pct
+sdk-v4,90,82,94,2.4
+```
+
+Long, with `"format": "long"`:
+
+```json
+[
+  { "feature": "sdk-v4", "signal": "agent_integration", "value": 90 },
+  { "feature": "sdk-v4", "signal": "retry_rate_pct", "value": 2.4 }
+]
+```
+
+## The demo site
+
+The Next.js app at the repo root is the original prototype of the framework, built for a Vercel Product Strategy and Operations conversation. Its argument is that a fast-growing share of Vercel deploys now comes from agents (around 30%, most of them Claude Code), and a landing framework built to measure human adoption cannot see that user. All of its data is illustrative and synthetic, and the numbers are directional.
+
+- **Who's actually deploying**: human vs agent deploy mix trending toward about 30% agent.
+- **Landing, rebuilt**: the metrics a human-adoption dashboard goes blind on, and the agent-native replacements.
+- **Did it land? It depends on the lens**: the interactive Landing Scorecard that `agent-landing score` generalizes.
+- **Ask the framework**: a deterministic local panel that answers questions like "Did feature-analytics-v2 land?" with no live model behind it.
+- **ShipOps rhythm strip**: the weekly launch cadence.
+
+Stack: Next.js 16 (App Router), Tailwind v4, and lucide-react, deployed on Vercel.
 
 ## Develop
 
 ```bash
 pnpm install
-pnpm dev
-pnpm build
+pnpm dev                              # demo site
+pnpm build                            # demo site production build
+pnpm test                             # CLI tests (vitest)
+pnpm --filter agent-landing build     # CLI build to packages/cli/dist
+pnpm --filter agent-landing typecheck
+pnpm --filter agent-landing lint
+pnpm --filter agent-landing gen:schema   # regenerate the JSON Schema after changing src/config.ts
 ```
 
-## Structure
+```
+app/, components/, lib/        Demo site (Next.js)
+packages/cli/
+  src/cli.ts                   Command parsing and output
+  src/config.ts                zod config schema and defaults
+  src/scan/                    Fetcher (SSRF guard, caps), robots.txt, HTML extraction, checks
+  src/score/                   CSV/JSON ingest and the scoring engine
+  schema/                      Generated JSON Schema
+  examples/launches.csv        Synthetic data derived from lib/data.ts
+  test/                        vitest suites, including a local fixture server
+skills/agent-landing/          Claude Code skill and references
+```
 
-```
-app/
-  layout.tsx        # fonts (Geist/Inter/JetBrains Mono), metadata
-  page.tsx          # composes the sections
-  globals.css       # Tailwind v4 @theme design tokens
-components/          # nav, hero, deploy-stats, landing-rebuilt,
-                     # ask-framework, rhythm-strip, footer, sparkline
-lib/
-  data.ts           # synthetic dataset
-  framework.ts      # local reasoning for "Ask the framework"
-```
+Tests never touch the internet. Scan tests run against a local HTTP server.
+

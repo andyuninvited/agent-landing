@@ -1,0 +1,755 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "scan": {
+      "default": {
+        "keyPages": [
+          "/"
+        ],
+        "maxPages": 5,
+        "maxRequests": 40,
+        "timeoutMs": 10000,
+        "maxBytes": 2000000,
+        "userAgent": "agent-landing/0.1 (+https://github.com/andyuninvited/agent-landing)",
+        "agentUserAgents": [
+          "ClaudeBot",
+          "Claude-User",
+          "Claude-SearchBot",
+          "anthropic-ai",
+          "GPTBot",
+          "ChatGPT-User",
+          "OAI-SearchBot",
+          "PerplexityBot",
+          "Perplexity-User",
+          "Google-Extended",
+          "CCBot"
+        ],
+        "checks": {}
+      },
+      "type": "object",
+      "properties": {
+        "keyPages": {
+          "default": [
+            "/"
+          ],
+          "description": "Paths that matter most to an agent, such as /, /docs, /pricing.",
+          "minItems": 1,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "pattern": "^\\/"
+          }
+        },
+        "maxPages": {
+          "default": 5,
+          "description": "Upper bound on key pages fetched.",
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 20
+        },
+        "maxRequests": {
+          "default": 40,
+          "description": "Upper bound on total HTTP requests per scan.",
+          "type": "integer",
+          "minimum": 5,
+          "maximum": 100
+        },
+        "timeoutMs": {
+          "default": 10000,
+          "description": "Per-request timeout.",
+          "type": "integer",
+          "minimum": 1000,
+          "maximum": 60000
+        },
+        "maxBytes": {
+          "default": 2000000,
+          "description": "Per-response size cap after decompression.",
+          "type": "integer",
+          "minimum": 10000,
+          "maximum": 10000000
+        },
+        "userAgent": {
+          "default": "agent-landing/0.1 (+https://github.com/andyuninvited/agent-landing)",
+          "type": "string",
+          "minLength": 1
+        },
+        "agentUserAgents": {
+          "default": [
+            "ClaudeBot",
+            "Claude-User",
+            "Claude-SearchBot",
+            "anthropic-ai",
+            "GPTBot",
+            "ChatGPT-User",
+            "OAI-SearchBot",
+            "PerplexityBot",
+            "Perplexity-User",
+            "Google-Extended",
+            "CCBot"
+          ],
+          "description": "AI agent and crawler tokens checked against robots.txt.",
+          "minItems": 1,
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "checks": {
+          "default": {},
+          "type": "object",
+          "properties": {
+            "robots-ai": {
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "default": true,
+                  "description": "Run this check.",
+                  "type": "boolean"
+                },
+                "weight": {
+                  "description": "Weight in the overall score. Defaults per check.",
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100
+                }
+              },
+              "additionalProperties": false
+            },
+            "llms-txt": {
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "default": true,
+                  "description": "Run this check.",
+                  "type": "boolean"
+                },
+                "weight": {
+                  "description": "Weight in the overall score. Defaults per check.",
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100
+                }
+              },
+              "additionalProperties": false
+            },
+            "sitemap": {
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "default": true,
+                  "description": "Run this check.",
+                  "type": "boolean"
+                },
+                "weight": {
+                  "description": "Weight in the overall score. Defaults per check.",
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100
+                }
+              },
+              "additionalProperties": false
+            },
+            "ssr-readable": {
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "default": true,
+                  "description": "Run this check.",
+                  "type": "boolean"
+                },
+                "weight": {
+                  "description": "Weight in the overall score. Defaults per check.",
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100
+                }
+              },
+              "additionalProperties": false
+            },
+            "markdown": {
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "default": true,
+                  "description": "Run this check.",
+                  "type": "boolean"
+                },
+                "weight": {
+                  "description": "Weight in the overall score. Defaults per check.",
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100
+                }
+              },
+              "additionalProperties": false
+            },
+            "structured-data": {
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "default": true,
+                  "description": "Run this check.",
+                  "type": "boolean"
+                },
+                "weight": {
+                  "description": "Weight in the overall score. Defaults per check.",
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100
+                }
+              },
+              "additionalProperties": false
+            },
+            "api-docs": {
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "default": true,
+                  "description": "Run this check.",
+                  "type": "boolean"
+                },
+                "weight": {
+                  "description": "Weight in the overall score. Defaults per check.",
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100
+                }
+              },
+              "additionalProperties": false
+            },
+            "mcp": {
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "default": true,
+                  "description": "Run this check.",
+                  "type": "boolean"
+                },
+                "weight": {
+                  "description": "Weight in the overall score. Defaults per check.",
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100
+                }
+              },
+              "additionalProperties": false
+            },
+            "auth-friction": {
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "default": true,
+                  "description": "Run this check.",
+                  "type": "boolean"
+                },
+                "weight": {
+                  "description": "Weight in the overall score. Defaults per check.",
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100
+                }
+              },
+              "additionalProperties": false
+            },
+            "page-weight": {
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "default": true,
+                  "description": "Run this check.",
+                  "type": "boolean"
+                },
+                "weight": {
+                  "description": "Weight in the overall score. Defaults per check.",
+                  "type": "number",
+                  "minimum": 0,
+                  "maximum": 100
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "score": {
+      "default": {
+        "format": "wide",
+        "columns": {
+          "feature": "feature",
+          "signal": "signal",
+          "value": "value"
+        },
+        "signalColumns": {},
+        "aggregate": "mean",
+        "lenses": [
+          {
+            "id": "human",
+            "label": "Human-adoption lens",
+            "verdicts": [
+              {
+                "min": 70,
+                "label": "Landed",
+                "tone": "landed"
+              },
+              {
+                "min": 45,
+                "label": "Mixed signal",
+                "tone": "mixed"
+              },
+              {
+                "min": 30,
+                "label": "At risk",
+                "tone": "risk"
+              },
+              {
+                "min": 0,
+                "label": "Can't see it",
+                "tone": "blind"
+              }
+            ]
+          },
+          {
+            "id": "agent",
+            "label": "Agent-as-user lens"
+          }
+        ],
+        "verdicts": [
+          {
+            "min": 70,
+            "label": "Landed",
+            "tone": "landed"
+          },
+          {
+            "min": 45,
+            "label": "Mixed signal",
+            "tone": "mixed"
+          },
+          {
+            "min": 0,
+            "label": "At risk",
+            "tone": "risk"
+          }
+        ],
+        "signals": [
+          {
+            "key": "human_clicks",
+            "label": "Human clicks & navigation",
+            "lens": "human",
+            "weight": 25,
+            "normalize": {
+              "type": "identity"
+            }
+          },
+          {
+            "key": "human_dau_change",
+            "label": "Daily active users (change)",
+            "lens": "human",
+            "weight": 25,
+            "normalize": {
+              "type": "identity"
+            }
+          },
+          {
+            "key": "human_tooltip",
+            "label": "In-product tooltip engagement",
+            "lens": "human",
+            "weight": 25,
+            "normalize": {
+              "type": "identity"
+            }
+          },
+          {
+            "key": "human_adopt_clicks",
+            "label": "Manual adopt clicks",
+            "lens": "human",
+            "weight": 25,
+            "normalize": {
+              "type": "identity"
+            }
+          },
+          {
+            "key": "agent_integration",
+            "label": "Agent integration rate",
+            "lens": "agent",
+            "weight": 20,
+            "normalize": {
+              "type": "identity"
+            }
+          },
+          {
+            "key": "agent_ttfd",
+            "label": "Time-to-first-working-deploy",
+            "lens": "agent",
+            "weight": 20,
+            "normalize": {
+              "type": "identity"
+            }
+          },
+          {
+            "key": "agent_loop",
+            "label": "Deploy to iterate loop health",
+            "lens": "agent",
+            "weight": 20,
+            "normalize": {
+              "type": "identity"
+            }
+          },
+          {
+            "key": "agent_retry",
+            "label": "Agent retry / success rate",
+            "lens": "agent",
+            "weight": 20,
+            "normalize": {
+              "type": "identity"
+            }
+          },
+          {
+            "key": "agent_reuse",
+            "label": "Downstream reuse",
+            "lens": "agent",
+            "weight": 20,
+            "normalize": {
+              "type": "identity"
+            }
+          },
+          {
+            "key": "agent_acceptance",
+            "label": "Composite acceptance (human verdict)",
+            "lens": "agent",
+            "weight": 30,
+            "normalize": {
+              "type": "identity"
+            }
+          },
+          {
+            "key": "retry_rate_pct",
+            "label": "Agent retry rate",
+            "lens": "agent",
+            "weight": 0,
+            "normalize": {
+              "type": "linear",
+              "min": 0,
+              "max": 20,
+              "direction": "lower"
+            },
+            "alert": {
+              "when": "above",
+              "value": 8,
+              "message": "Retry rate spiked to {value}%. A human-adoption dashboard would have called this a win and missed the failure."
+            }
+          }
+        ]
+      },
+      "type": "object",
+      "properties": {
+        "format": {
+          "default": "wide",
+          "description": "wide: one row per feature with a column per signal. long: one row per feature, signal, and value.",
+          "type": "string",
+          "enum": [
+            "wide",
+            "long"
+          ]
+        },
+        "columns": {
+          "default": {
+            "feature": "feature",
+            "signal": "signal",
+            "value": "value"
+          },
+          "description": "Column names in your data. signal and value apply to the long format.",
+          "type": "object",
+          "properties": {
+            "feature": {
+              "default": "feature",
+              "type": "string"
+            },
+            "signal": {
+              "default": "signal",
+              "type": "string"
+            },
+            "value": {
+              "default": "value",
+              "type": "string"
+            }
+          },
+          "additionalProperties": false
+        },
+        "signalColumns": {
+          "default": {},
+          "description": "Wide format: signal key to column name, when they differ.",
+          "type": "object",
+          "propertyNames": {
+            "type": "string"
+          },
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "aggregate": {
+          "default": "mean",
+          "description": "How repeated rows for one feature and signal combine.",
+          "type": "string",
+          "enum": [
+            "mean",
+            "sum",
+            "min",
+            "max",
+            "last"
+          ]
+        },
+        "lenses": {
+          "minItems": 1,
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9_-]+$"
+              },
+              "label": {
+                "type": "string",
+                "minLength": 1
+              },
+              "verdicts": {
+                "description": "Overrides the shared verdict ladder for this lens.",
+                "minItems": 1,
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "min": {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 100,
+                      "description": "Lowest lens score that earns this verdict."
+                    },
+                    "label": {
+                      "type": "string",
+                      "minLength": 1
+                    },
+                    "tone": {
+                      "type": "string",
+                      "enum": [
+                        "landed",
+                        "mixed",
+                        "risk",
+                        "blind"
+                      ]
+                    }
+                  },
+                  "required": [
+                    "min",
+                    "label",
+                    "tone"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            },
+            "required": [
+              "id",
+              "label"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "verdicts": {
+          "default": [
+            {
+              "min": 70,
+              "label": "Landed",
+              "tone": "landed"
+            },
+            {
+              "min": 45,
+              "label": "Mixed signal",
+              "tone": "mixed"
+            },
+            {
+              "min": 0,
+              "label": "At risk",
+              "tone": "risk"
+            }
+          ],
+          "minItems": 1,
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "min": {
+                "type": "number",
+                "minimum": 0,
+                "maximum": 100,
+                "description": "Lowest lens score that earns this verdict."
+              },
+              "label": {
+                "type": "string",
+                "minLength": 1
+              },
+              "tone": {
+                "type": "string",
+                "enum": [
+                  "landed",
+                  "mixed",
+                  "risk",
+                  "blind"
+                ]
+              }
+            },
+            "required": [
+              "min",
+              "label",
+              "tone"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "signals": {
+          "minItems": 1,
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "key": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9_.-]+$"
+              },
+              "label": {
+                "type": "string",
+                "minLength": 1
+              },
+              "lens": {
+                "type": "string",
+                "minLength": 1
+              },
+              "weight": {
+                "type": "number",
+                "minimum": 0,
+                "description": "0 makes the signal watch-only: shown and alerted on, never scored."
+              },
+              "normalize": {
+                "default": {
+                  "type": "identity"
+                },
+                "oneOf": [
+                  {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "const": "identity"
+                      }
+                    },
+                    "required": [
+                      "type"
+                    ],
+                    "additionalProperties": false,
+                    "description": "Value is already a 0-100 health score."
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "const": "linear"
+                      },
+                      "min": {
+                        "type": "number"
+                      },
+                      "max": {
+                        "type": "number"
+                      },
+                      "direction": {
+                        "default": "higher",
+                        "description": "Whether higher raw values are healthier.",
+                        "type": "string",
+                        "enum": [
+                          "higher",
+                          "lower"
+                        ]
+                      }
+                    },
+                    "required": [
+                      "type",
+                      "min",
+                      "max"
+                    ],
+                    "additionalProperties": false
+                  },
+                  {
+                    "type": "object",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "const": "boolean"
+                      },
+                      "good": {
+                        "default": true,
+                        "description": "Which value counts as healthy.",
+                        "type": "boolean"
+                      }
+                    },
+                    "required": [
+                      "type"
+                    ],
+                    "additionalProperties": false
+                  }
+                ]
+              },
+              "alert": {
+                "type": "object",
+                "properties": {
+                  "when": {
+                    "type": "string",
+                    "enum": [
+                      "above",
+                      "below"
+                    ]
+                  },
+                  "value": {
+                    "type": "number",
+                    "description": "Raw threshold, compared before normalization."
+                  },
+                  "message": {
+                    "description": "Template with {label}, {value}, and {threshold} placeholders.",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "when",
+                  "value"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "required": [
+              "key",
+              "label",
+              "lens",
+              "weight"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [
+        "lenses",
+        "signals"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false,
+  "$id": "https://raw.githubusercontent.com/andyuninvited/agent-landing/main/packages/cli/schema/agent-landing.schema.json",
+  "title": "agent-landing config"
+}

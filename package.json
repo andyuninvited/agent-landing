@@ -1,12 +1,13 @@
 {
-  "name": "agent-landing",
+  "name": "agent-landing-site",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "test": "pnpm --filter agent-landing test"
   },
   "dependencies": {
     "lucide-react": "^1.21.0",

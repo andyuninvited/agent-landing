@@ -1,6 +1,35 @@
 # agent-landing
 
-A CLI and Claude Code skill built on the Agent-as-User Landing Framework. It answers two questions for any product:
+**Can an AI agent actually use your product? And did your last launch land with the agents, or only with the people?**
+
+Agents now read your docs, call your API, and ship code against it, often before anyone on the team opens your landing page. Most product sites are still built for human eyes. They have pages that render only in JavaScript, no llms.txt, no markdown versions of the docs, and an API spec an agent can't find. Most launch dashboards still count human clicks too, so they can't tell when agents adopted a feature or kept retrying it until they gave up.
+
+agent-landing checks both. `scan` shows you what an agent sees when it arrives and ranks the fixes by points. `score` reads your own launch data and gives a verdict for each audience you care about.
+
+## I scanned my own site first
+
+I built the framework behind this tool, then pointed `scan` at my own demo site. It scored **40 out of 100**. The pages were readable without JavaScript and an agent could get in without a login wall, but there was no llms.txt, no markdown, no sitemap, and no API spec. The top three fixes on the list were worth up to 35 more points.
+
+`score` catches the opposite problem. In the bundled example, an auth refactor scores 76 under the human lens, which looks like a win. Under the agent lens it scores 35, and the tool flags why:
+
+```text
+auth-refactor
+  Not yet. It looks landed under the Human-adoption lens, but it is at risk under the Agent-as-user lens.
+  Human-adoption lens   76/100  Landed
+  Agent-as-user lens    35/100  At risk
+  alert Retry rate spiked to 11.7%. A human-adoption dashboard would have called this a win and missed the failure.
+```
+
+## Why use it
+
+- **You define what landed means.** Signals, weights, thresholds, lenses, and verdict labels live in one config file. Add a partner lens, drop the API checks for a marketing site, or weight retry rate twice as heavily as clicks.
+- **Every fix has a number on it.** The scan ranks its fixes by how many points each one is worth, so the first item on the list is the one to do first.
+- **Claude sets it up for you.** The Claude Code skill asks who your agent users are and what data you have, then writes the config and walks you through the results.
+- **It runs locally and costs nothing.** No LLM calls and no paid APIs. The scanner respects robots.txt, caps page sizes, and won't fetch private network addresses unless you ask it to.
+
+## What it checks
+
+It answers two questions for any product:
 
 1. **Can an agent find and use this product?** `agent-landing scan <url>` checks the surfaces agents actually read (robots.txt, llms.txt, sitemaps, server-rendered HTML, markdown, JSON-LD, API specs, MCP discovery, auth friction, and token cost) and returns a score per check, an overall score, and a prioritized fix list.
 2. **Did a launch land for agent users?** `agent-landing score --data <events>` scores each feature from your own telemetry under the lenses you define (human, agent, partner, or any other), with verdicts and a plain-language explanation such as a retry spike callout.

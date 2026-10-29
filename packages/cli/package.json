@@ -1,0 +1,42 @@
+{
+  "name": "agent-landing",
+  "version": "0.1.0",
+  "description": "Can an agent find and use your product, and did your launch land for agent users? Scan and score from the Agent-as-User Landing Framework.",
+  "author": "Andy Rosic",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/andyuninvited/agent-landing.git",
+    "directory": "packages/cli"
+  },
+  "type": "module",
+  "bin": {
+    "agent-landing": "dist/cli.js"
+  },
+  "files": [
+    "dist",
+    "schema",
+    "examples"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "lint": "eslint .",
+    "test": "vitest run",
+    "gen:schema": "tsx scripts/gen-schema.ts"
+  },
+  "dependencies": {
+    "zod": "^4.1.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9",
+    "@types/node": "^20",
+    "eslint": "^9",
+    "tsx": "^4",
+    "typescript": "^5",
+    "typescript-eslint": "^8",
+    "vitest": "^3"
+  }
+}

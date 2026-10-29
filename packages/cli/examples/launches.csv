@@ -1,0 +1,4 @@
+feature,human_clicks,human_dau_change,human_tooltip,human_adopt_clicks,agent_integration,agent_ttfd,agent_loop,agent_retry,agent_reuse,agent_acceptance,retry_rate_pct
+feature-analytics-v2,8,6,11,4,84,88,80,92,60,85,3.1
+sdk-v4,55,48,50,52,90,82,78,94,95,90,2.4
+auth-refactor,80,75,70,78,40,70,45,30,15,20,11.7

@@ -1,0 +1,12 @@
+{
+  "name": "agent-landing",
+  "description": "Make your product usable by AI agents, and know when a launch lands with them.",
+  "owner": { "name": "Andy Rosic", "url": "https://github.com/andyuninvited" },
+  "plugins": [
+    {
+      "name": "agent-landing",
+      "source": "./",
+      "description": "Scan what agents see when they reach your product, and score whether a launch landed with agents or only with people."
+    }
+  ]
+}

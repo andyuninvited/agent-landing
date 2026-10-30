@@ -239,3 +239,7 @@ skills/agent-landing/          Claude Code skill and references
 
 Tests never touch the internet. Scan tests run against a local HTTP server.
 
+
+## License
+
+MIT. Copyright (c) 2026 Andy Rosic.

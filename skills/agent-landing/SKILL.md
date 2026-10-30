@@ -19,7 +19,7 @@ Try these in order and use the first that works. Call the working command `$AL` 
 1. `agent-landing --version` (installed globally)
 2. `npx --no-install agent-landing --version` (installed in the project)
 3. A local clone: if `packages/cli/dist/cli.js` exists in a checkout of github.com/andyuninvited/agent-landing, use `node <clone>/packages/cli/dist/cli.js`. If the clone exists but `dist/` does not, run `pnpm install && pnpm --filter agent-landing build` in the clone first.
-4. Otherwise ask the builder before cloning: `git clone https://github.com/andyuninvited/agent-landing.git`, then step 3.
+4. `npx -y agent-landing --version` (runs the published npm package without installing it). Ask the builder first if npx needs to download it.
 
 Run `$AL --help` once to confirm.
 

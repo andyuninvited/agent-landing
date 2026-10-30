@@ -39,5 +39,16 @@
     "typescript-eslint": "^8",
     "vitest": "^3"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "homepage": "https://github.com/andyuninvited/agent-landing#readme",
+  "bugs": "https://github.com/andyuninvited/agent-landing/issues",
+  "keywords": [
+    "ai-agents",
+    "llms-txt",
+    "mcp",
+    "agent-experience",
+    "product-analytics",
+    "claude-code",
+    "cli"
+  ]
 }

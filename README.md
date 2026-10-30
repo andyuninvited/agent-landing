@@ -8,9 +8,11 @@ Agents now read your docs, call your API, and ship code against it, often before
 
 agent-landing checks both. `scan` shows you what an agent sees when it arrives and ranks the fixes by points. `score` reads your own launch data and gives a verdict for each audience you care about.
 
-## I scanned my own site first
+## I scanned my own sites first
 
 I built the framework behind this tool, then pointed `scan` at my own demo site. It scored **40 out of 100**. The pages were readable without JavaScript and an agent could get in without a login wall, but there was no llms.txt, no markdown, no sitemap, and no API spec. The top three fixes on the list were worth up to 35 more points.
+
+My personal site, andyrosic.com, scored **53, an F**. So I worked the fix list: explicit AI agent rules in robots.txt, an llms.txt, markdown versions of the pages, a read-only API with an OpenAPI spec, and a read-only MCP server. The rescan scored **100**. Every one of those fixes came straight off the report, and the [before and after](https://hypocrisy-highlighter.vercel.app/c/andy-rosic) is public.
 
 `score` catches the opposite problem. In the bundled example, an auth refactor scores 76 under the human lens, which looks like a win. Under the agent lens it scores 35, and the tool flags why:
 

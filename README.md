@@ -22,6 +22,10 @@ auth-refactor
   alert Retry rate spiked to 11.7%. A human-adoption dashboard would have called this a win and missed the failure.
 ```
 
+## The AI Hypocrisy Highlighter
+
+Then I ran `scan` on the homepages of 52 companies that sell AI agents. The class average is 61, a D, and 22 of them got an F. Four turned the scanner away at the front door with a 403. Every company has a report card with a letter grade, a teacher's comment, and its cheapest fixes at [hypocrisy-highlighter.vercel.app](https://hypocrisy-highlighter.vercel.app).
+
 ## Why use it
 
 - **You define what landed means.** Signals, weights, thresholds, lenses, and verdict labels live in one config file. Add a partner lens, drop the API checks for a marketing site, or weight retry rate twice as heavily as clicks.

@@ -73,7 +73,15 @@ Exit codes: 0 on success, 1 on a runtime or config error, 2 on a usage error.
 
 ## Quickstart: Claude Code skill
 
-`skills/agent-landing/` is a Claude Code skill. Copy it into a project's `.claude/skills/` (or your personal `~/.claude/skills/`) and ask Claude something like "can agents use our docs site?" or "did the v2 launch land for agent users?". Claude interviews you about the product, the agent users, the pages that matter, the telemetry you have, and what "landed" means for you. It then writes the config, runs `scan` and `score`, and walks you through the top fixes. The skill looks for the CLI on your PATH, then in the project, then in a local clone.
+Install the plugin from inside Claude Code:
+
+```
+/plugin install agent-landing --marketplace andyuninvited/agent-landing
+```
+
+On Claude Code older than 2.1.275, run `/plugin marketplace add andyuninvited/agent-landing` first, then `/plugin install agent-landing@agent-landing`. You can also copy `skills/agent-landing/` into a project's `.claude/skills/` (or your personal `~/.claude/skills/`).
+
+Then ask Claude something like "can agents use our docs site?" or "did the v2 launch land for agent users?". Claude interviews you about the product, the agent users, the pages that matter, the telemetry you have, and what "landed" means for you. It then writes the config, runs `scan` and `score`, and walks you through the top fixes. The skill looks for the CLI on your PATH, then in the project, then in a local clone.
 
 ## Example output
 

@@ -1,0 +1,10 @@
+{
+  "name": "agent-landing",
+  "version": "0.1.0",
+  "description": "Can an AI agent actually use your product? Scan what agents see and score whether a launch landed with agents or only with people.",
+  "author": { "name": "Andy Rosic", "url": "https://github.com/andyuninvited" },
+  "homepage": "https://github.com/andyuninvited/agent-landing",
+  "repository": "https://github.com/andyuninvited/agent-landing",
+  "license": "MIT",
+  "keywords": ["ai-agents", "llms-txt", "mcp", "product-analytics", "agent-experience"]
+}

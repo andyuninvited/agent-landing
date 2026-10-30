@@ -1,5 +1,7 @@
 # agent-landing
 
+[![npm](https://img.shields.io/npm/v/agent-landing)](https://www.npmjs.com/package/agent-landing) [![downloads](https://img.shields.io/npm/dm/agent-landing)](https://www.npmjs.com/package/agent-landing) [![GitHub stars](https://img.shields.io/github/stars/andyuninvited/agent-landing?style=social)](https://github.com/andyuninvited/agent-landing)
+
 **Can an AI agent actually use your product? And did your last launch land with the agents, or only with the people?**
 
 Agents now read your docs, call your API, and ship code against it, often before anyone on the team opens your landing page. Most product sites are still built for human eyes. They have pages that render only in JavaScript, no llms.txt, no markdown versions of the docs, and an API spec an agent can't find. Most launch dashboards still count human clicks too, so they can't tell when agents adopted a feature or kept retrying it until they gave up.
@@ -40,17 +42,13 @@ The repo also holds the original demo site, live at [agent-landing-rosic.vercel.
 
 ## Quickstart: CLI
 
-The package is not on npm yet, so run it from a clone:
+Run it with npx, no install needed:
 
 ```bash
-git clone https://github.com/andyuninvited/agent-landing.git
-cd agent-landing
-pnpm install
-pnpm --filter agent-landing build
-alias agent-landing="node $PWD/packages/cli/dist/cli.js"
+npx agent-landing scan https://your-product.com
 ```
 
-Then, in your own project:
+Or install it globally with `npm install -g agent-landing`. Then, in your own project:
 
 ```bash
 agent-landing init                               # writes agent-landing.config.json

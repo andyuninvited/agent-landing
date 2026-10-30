@@ -10,9 +10,9 @@ agent-landing checks both. `scan` shows you what an agent sees when it arrives a
 
 ## I scanned my own sites first
 
-I built the framework behind this tool, then pointed `scan` at my own demo site. It scored **40 out of 100**. The pages were readable without JavaScript and an agent could get in without a login wall, but there was no llms.txt, no markdown, no sitemap, and no API spec. The top three fixes on the list were worth up to 35 more points.
+I built the framework behind this tool, then pointed `scan` at my own demo site. It scored **40 out of 100**. The pages were readable without JavaScript and an agent could get in without a login wall, but there was no llms.txt, no markdown, no sitemap, and no API spec. The top three fixes on the list were worth up to 35 more points. So I worked the list and added explicit AI agent rules in robots.txt, a sitemap, JSON-LD, an llms.txt, markdown versions of the page, a read-only API over the demo data, and a read-only MCP server. The rescan scored **100**.
 
-My personal site, andyrosic.com, scored **53, an F**. So I worked the fix list: explicit AI agent rules in robots.txt, an llms.txt, markdown versions of the pages, a read-only API with an OpenAPI spec, and a read-only MCP server. The rescan scored **100**. Every one of those fixes came straight off the report, and the [before and after](https://hypocrisy-highlighter.vercel.app/c/andy-rosic) is public.
+My personal site, andyrosic.com, scored **53, an F**. I worked the same fix list: explicit AI agent rules in robots.txt, an llms.txt, markdown versions of the pages, a read-only API with an OpenAPI spec, and a read-only MCP server. The rescan scored **100**. Every one of those fixes came straight off the report, and the [before and after](https://hypocrisy-highlighter.vercel.app/c/andy-rosic) is public.
 
 `score` catches the opposite problem. In the bundled example, an auth refactor scores 76 under the human lens, which looks like a win. Under the agent lens it scores 35, and the tool flags why:
 
@@ -89,7 +89,7 @@ Then ask Claude something like "can agents use our docs site?" or "did the v2 la
 
 ## Example output
 
-`agent-landing scan https://agent-landing-rosic.vercel.app` (the demo site itself, scanned 2026-10-29):
+`agent-landing scan https://agent-landing-rosic.vercel.app` (the demo site itself, scanned 2026-10-29, before the fixes):
 
 ```
 Overall 40/100  (10 checks scored, 15 requests, pages: /)
